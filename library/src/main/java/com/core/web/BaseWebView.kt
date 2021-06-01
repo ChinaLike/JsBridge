@@ -13,7 +13,7 @@ import com.alibaba.fastjson.JSON
  * @author like
  * @date 5/24/21 4:19 PM
  */
-abstract class BaseWebView : WebView {
+abstract class BaseWebView : WebView,IWebView {
 
     /**
      * 存放注入的对象
@@ -50,20 +50,12 @@ abstract class BaseWebView : WebView {
     }
 
     /**
-     * Js调用原生的名字
-     */
-    open fun jsCallName(): String {
-        return "JsBridge"
-    }
-
-    /**
      * 回调
      * @param [cbId] 回调的Id
      * @param [data] 回调的数据
      * @param [isDeleteId] 是否删除当前回调，删除后后面的回调将不会执行
      */
-    @JvmOverloads
-    fun callback(cbId: String, data: CallbackBean, isDeleteId: Boolean = false) {
+    override fun callback(cbId: String, data: CallbackBean, isDeleteId: Boolean) {
         post {
             try {
                 val resultData: String = JSON.toJSONString(data)
@@ -73,17 +65,20 @@ abstract class BaseWebView : WebView {
                 e.printStackTrace()
             }
         }
-
     }
 
     @SuppressLint("JavascriptInterface")
     override fun addJavascriptInterface(`object`: Any, name: String) {
-        super.addJavascriptInterface(`object`, name)
         if (name != "MiWebViewDetector" && name != innerJavascriptInterfaceName) {
             javascriptInterfaceList.add(JavascriptInterfaceBean(`object`, name))
+        }else{
+            super.addJavascriptInterface(`object`, name)
         }
     }
 
+    /**
+     * 添加需要注入的类
+     */
     fun addJavascriptInterface(`object`: Any) {
         addJavascriptInterface(`object`, "")
     }
@@ -100,15 +95,8 @@ abstract class BaseWebView : WebView {
         if (client is BaseWebViewClient) {
             super.setWebViewClient(client)
         } else {
-            throw IllegalArgumentException("请传入继承BaseWebViewClient的WebViewClient¬")
+            throw IllegalArgumentException("请传入继承BaseWebViewClient的WebViewClient")
         }
-    }
-
-    /**
-     * 获取js的Window，可不用重写，如果遇到window对象不对可以使用这个重新赋值window
-     */
-    open fun getWindow(): String {
-        return "window"
     }
 
 }
