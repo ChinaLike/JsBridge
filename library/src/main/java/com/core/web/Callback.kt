@@ -19,7 +19,7 @@ class Callback(private val webView: BaseWebView, private val cbId: String) {
     fun success(
         message: String = "成功",
         data: Any? = null,
-        isDelete: Boolean = true
+        isDelete: Boolean = false
     ) {
         success(CallbackBean(0, message, data), isDelete)
     }
@@ -30,7 +30,7 @@ class Callback(private val webView: BaseWebView, private val cbId: String) {
      * @param [isDelete] 是否删除回调
      */
     @JvmOverloads
-    fun success(@NotNull  successData: CallbackBean, isDelete: Boolean = true) {
+    fun success(@NotNull  successData: CallbackBean, isDelete: Boolean = false) {
         webView.callback(cbId, successData, isDelete)
     }
 
@@ -46,7 +46,7 @@ class Callback(private val webView: BaseWebView, private val cbId: String) {
         code: Int,
         message: String,
         data: Any? = null,
-        isDelete: Boolean = true
+        isDelete: Boolean = false
     ) {
         error(CallbackBean(code, message, data), isDelete)
     }
@@ -57,7 +57,7 @@ class Callback(private val webView: BaseWebView, private val cbId: String) {
      * @param [errorData] 失败的回调
      */
     @JvmOverloads
-    fun error(@NotNull errorData:CallbackBean,isDelete: Boolean = true){
+    fun error(@NotNull errorData:CallbackBean,isDelete: Boolean = false){
         webView.callback(cbId, errorData, isDelete)
     }
 }

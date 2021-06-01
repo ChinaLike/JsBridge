@@ -1,8 +1,6 @@
 package com.like.jsbridge;
 
 import android.os.Bundle;
-import android.webkit.WebChromeClient;
-import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,9 +18,10 @@ public class MainActivity extends AppCompatActivity {
 
         webView.getSettings().setJavaScriptEnabled(true);
 
-        webView.addJavascriptInterface(new Test1(),"Toast");
+        webView.addJavascriptInterface(new JsBridgeToast(this));
+        webView.addJavascriptInterface(new JsBridgeDialog(this));
 
-        webView.loadUrl("file:///android_asset/newTest.html");
+        webView.loadUrl("file:///android_asset/test.html");
 
     }
 }

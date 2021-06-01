@@ -1,5 +1,6 @@
 package com.core.web
 
+import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.CallSuper
@@ -26,6 +27,9 @@ class BaseWebViewClient : WebViewClient() {
                 jsInject = JsInject(view)
             }
             view.loadUrl("javascript:" + jsInject!!.injectJs())
+            if (BuildConfig.DEBUG){
+                Log.d("注入的数据",jsInject!!.injectJs())
+            }
             injectUrl.add(url)
         }
     }

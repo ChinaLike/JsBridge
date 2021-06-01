@@ -2,23 +2,85 @@
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
     <title>
-        js调用java
+        js与原生混调
     </title>
 </head>
 
+<style type="text/css">
+		.parent{
+			display: flex;
+			flex-direction: column;
+		}
+		.item{
+			margin: 10;
+			background-color: aqua;
+			padding: 6;
+		}
+	</style>
+
 <body>
-<p>
-    <input type="button" id="enter" value="发消息给Native" onclick="testClick();" />
-</p>
+<div class="parent">
+    <h2 style="align-items: center; width: 100%;">js调用原生</h2>
+    <input type="button" class="item" value="调用原生无参数无回调方法" onclick="nativeNoArgAndNoCallback()" />
+    <input type="button" class="item" value="调用原生无参数有回调方法" onclick="nativeNoArgAndCallback()" />
+    <input type="button" class="item" value="调用原生有参数无回调方法" onclick="nativeArgAndNoCallback()" />
+    <input type="button" class="item" value="调用原生有参数有回调方法" onclick="nativeArgAndCallback()" />
+
+    <input type="button" class="item" value="调用原生方法后删除回调" onclick="nativeDeleteCallback()" />
+    <input type="button" class="item" value="调用原生方法后不删除回调" onclick="nativeNoDeleteCallback()" />
+
+    <input type="button" class="item" value="原生弹窗" onclick="nativeDialog()" />
+</div>
 </body>
 <script>
 
+		function nativeNoArgAndNoCallback(){
+			JsBridge.nativeNoArgAndNoCallback();
+		}
 
+		function nativeNoArgAndCallback(){
+			JsBridge.nativeNoArgAndCallback(function(result){
+				alert(JSON.stringify(result));
+			});
+		}
 
-		function testClick() {
-			JsBridge.toast(function(data){
-			    alert(JSON.stringify(data))
-			})
+		function nativeArgAndNoCallback(){
+			JsBridge.nativeArgAndNoCallback("调用原生有参数无回调方法");
+		}
+
+		function nativeArgAndCallback(){
+			JsBridge.nativeArgAndCallback("调用原生有参数有回调方法",function(result){
+				alert(JSON.stringify(result))
+			});
+		}
+
+		function nativeDeleteCallback(){
+			JsBridge.nativeDeleteCallback("调用原生方法后删除回调",function(result){
+				alert(JSON.stringify(result))
+			},function(error){
+				alert(JSON.stringify(result))
+			});
+		}
+
+		function nativeNoDeleteCallback(){
+			JsBridge.nativeNoDeleteCallback("调用原生方法后不删除回调",function(result){
+				alert(JSON.stringify(result))
+			},function(error){
+				alert(JSON.stringify(error))
+			});
+		}
+
+		function nativeDialog(){
+			JsBridge.nativeDialog({
+				title:"温馨提示",
+				content:"天快要下雨了，请大家带好雨伞",
+				confirmText:"知道了，谢谢",
+				cancelText:"我偏不带"
+			},function(result){
+				alert(result.data)
+			},function(error){
+				alert(error.data)
+			});
 		}
 	</script>
 

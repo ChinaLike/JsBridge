@@ -23,7 +23,7 @@ abstract class BaseWebView : WebView {
     /**
      * 内部使用注入名称
      */
-    val innerJavascriptInterfaceName:String = "JsWebViewBridge"
+    val innerJavascriptInterfaceName: String = "JsWebViewBridge"
 
     constructor(context: Context) : super(context) {
         initWebView()
@@ -67,7 +67,7 @@ abstract class BaseWebView : WebView {
         post {
             try {
                 val resultData: String = JSON.toJSONString(data)
-                val javascriptString ="${jsCallName()}.on('${cbId}','${resultData}',${isDeleteId})"
+                val javascriptString = "${jsCallName()}.on('${cbId}','${resultData}',${isDeleteId})"
                 loadUrl("javascript:$javascriptString")
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -82,6 +82,10 @@ abstract class BaseWebView : WebView {
         if (name != "MiWebViewDetector" && name != innerJavascriptInterfaceName) {
             javascriptInterfaceList.add(JavascriptInterfaceBean(`object`, name))
         }
+    }
+
+    fun addJavascriptInterface(`object`: Any) {
+        addJavascriptInterface(`object`, "")
     }
 
     override fun setWebChromeClient(client: WebChromeClient?) {
@@ -103,7 +107,7 @@ abstract class BaseWebView : WebView {
     /**
      * 获取js的Window，可不用重写，如果遇到window对象不对可以使用这个重新赋值window
      */
-    open fun getWindow():String{
+    open fun getWindow(): String {
         return "window"
     }
 
