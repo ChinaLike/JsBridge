@@ -1,0 +1,141 @@
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>
+        js调用java
+    </title>
+</head>
+
+<body>
+<p>
+    <input type="button" id="enter" value="发消息给Native" onclick="testClick();" />
+</p>
+</body>
+<script>
+
+		/**
+		 * 数据转JSON
+		 * @param {Object} params 数据
+		 */
+		function JsBridge_Any_To_Json(params){
+			var paramsData = params;
+			if (typeof params == 'string') {
+				try{
+					var obj = JSON.parse(params);
+					if (typeof obj == 'object' && obj) {
+						paramsData = obj;
+					} else{
+						throw new Error("params参数应该是JSON格式");
+					}
+				}catch(e){
+					throw new Error("params参数应该是JSON格式");
+				}
+			}
+			if (paramsData == null || paramsData == '') {
+				throw new Error("params参数应该是JSON格式");
+			}else{
+				return paramsData;
+			}
+		}
+
+		function JsBridge_Object_Save(params,requireParams){
+			//参数
+			var paramsData ={};
+
+			if(params && params.length){
+				//有参数
+				if (params.length == 0) {
+					if (requireParams) {
+						throw new Error("调用toast方法需要传递参数");
+					}
+				} else if(params.length == 1 && typeof params[0] != 'function'){
+					if (requireParams) {
+						paramsData = JsBridge_Any_To_Json(params[0])
+					} else{
+						throw new Error("调用toast方法不需要传递参数");
+					}
+				}else if(params.length == 1 && typeof params[0] === 'function'){
+					JsBridge.id++;
+					JsBridge.successCallback[JsBridge.id] = params[0];
+				}else if(params.length == 2 && typeof params[0] != 'function' && typeof params[1] === 'function'){
+					if (requireParams) {
+						paramsData = JsBridge_Any_To_Json(params[0])
+					} else{
+						throw new Error("调用toast方法不需要传递参数");
+					}
+					JsBridge.id++;
+					JsBridge.successCallback[JsBridge.id] = params[1];
+				}else if(params.length == 2 && typeof params[0] === 'function' && typeof params[1] === 'function'){
+					JsBridge.id++;
+					JsBridge.successCallback[JsBridge.id] = params[0];
+					JsBridge.failCallback[JsBridge.id] = params[1];
+				}else if(params.length == 3 && typeof params[0] != 'function' && typeof params[1] === 'function' && typeof params[2] === 'function'){
+					if (requireParams) {
+						paramsData = JsBridge_Any_To_Json(params[0])
+					} else{
+						throw new Error("调用toast方法不需要传递参数");
+					}
+					JsBridge.id++;
+					JsBridge.successCallback[JsBridge.id] = params[1];
+					JsBridge.failCallback[JsBridge.id] = params[2];
+				}else{
+					throw new Error("参数错误");
+				}
+			}else{
+				//没有传递任何参数
+				if (requireParams) {
+					throw new Error("调用toast方法需要传递参数");
+				}
+			}
+			paramsData.cbId = JsBridge.id;
+
+			return paramsData;
+		}
+
+		var JsBridge = {
+			id: 1,
+			successCallback: {},
+			failCallback: {},
+			toast: function() {
+				var requireParams = true;
+				var paramsData = JsBridge_Object_Save(arguments,requireParams);
+				console.log(JSON.stringify(paramsData));
+				console.log("successCallback:"+this.successCallback);
+				if (requireParams) {
+					window.Toast.toast(JSON.stringify(paramsData));
+				} else{
+					window.Toast.toast();
+				}
+			},
+			on: function(cbId, result, deleteId) {
+				console.log("cbId:"+cbId);
+				console.log("返回结果："+JSON.stringify(result));
+				var success = this.successCallback[cbId];
+				var fail = this.failCallback[cbId];
+				try {
+					var resultData = result;
+					if(typeof result == 'string'){
+						resultData = JSON.parse(result);
+					}
+					if (resultData.code == 0 && success) {
+						success(resultData);
+					}
+					if (resultData.code != 0 && fail) {
+						fail(resultData);
+					}
+					if (deleteId) {
+						delete this.successCallback[cbId];
+						delete this.failCallback[cbId];
+					}
+				} catch (e) {
+					throw new Error("回调数据异常");
+				}
+			}
+		}
+
+		function testClick() {
+			JsBridge.toast({data:"123"})
+		}
+	</script>
+
+</html>
