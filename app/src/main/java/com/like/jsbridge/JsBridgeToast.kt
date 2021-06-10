@@ -56,4 +56,8 @@ class JsBridgeToast(private val context: Context)  {
         },3000)
     }
 
+    @JavascriptInterface
+    fun nativeSyncCallback():String{
+        return "原生同步回调"
+    }
 }

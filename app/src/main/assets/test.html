@@ -31,6 +31,8 @@
     <input type="button" class="item" value="调用原生方法后删除回调" onclick="nativeDeleteCallback()" />
     <input type="button" class="item" value="调用原生方法后不删除回调" onclick="nativeNoDeleteCallback()" />
 
+    <input type="button" class="item" value="调用原生方法同步回调" onclick="nativeSyncCallback()" />
+
     <input type="button" class="item" value="原生弹窗" onclick="nativeDialog()" />
 </div>
 </body>
@@ -84,6 +86,11 @@
 			},function(error){
 				alert(error.data)
 			});
+		}
+
+		function nativeSyncCallback(){
+			var  result = JsBridge.nativeSyncCallback("");
+			alert(result)
 		}
 
 		function jsNoArgAndNoCallback(){

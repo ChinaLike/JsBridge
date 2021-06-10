@@ -104,7 +104,7 @@ class JsInject(private val webView: BaseWebView) {
                     "\t\t\t${it.name}: function() {\n" +
                             "\t\t\t\t\tvar cbId = getCallbackId(\"${it.name}\");\n" +
                             "\t\t\t\t\tvar paramsData = handleCallbackDataAndParams(arguments, cbId);\n" +
-                            "\t\t\t\tgetWindow().nativeDispatch(\"${bean.`object`.javaClass.name}\", \"${it.name}\", paramsData, cbId);\n" +
+                            "\t\t\t\treturn getWindow().nativeDispatch(\"${bean.`object`.javaClass.name}\", \"${it.name}\", paramsData, cbId);\n" +
                             "\t\t\t},\n"
                 )
             }
