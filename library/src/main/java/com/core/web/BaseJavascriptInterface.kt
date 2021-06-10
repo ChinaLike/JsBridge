@@ -1,5 +1,6 @@
 package com.core.web
 
+import android.text.TextUtils
 import android.webkit.JavascriptInterface
 import com.core.util.ReflectUtil
 
@@ -18,7 +19,8 @@ class BaseJavascriptInterface(private val webView: BaseWebView) {
      * @param [cbId] 回调Id
      */
     @JavascriptInterface
-    fun nativeDispatch(classPath: String, method: String, data: String, cbId: String) {
+    fun nativeDispatch(classPath: String, method: String, data: String, cbId: String):String {
+        var resultData:Any? = null
         webView.javascriptInterfaceList?.forEach { bean ->
             //对应路径下的类
             if (bean.`object`.javaClass.name == classPath) {
@@ -30,28 +32,28 @@ class BaseJavascriptInterface(private val webView: BaseWebView) {
                         when (params?.size) {
                             0 -> {
                                 //没有参数
-                                it.invoke(bean.`object`)
+                                resultData = it.invoke(bean.`object`)
                             }
                             1 -> {
                                 //一个参数
                                 when (params[0].simpleName) {
                                     Callback::class.java.simpleName -> {
-                                        it.invoke(bean.`object`, Callback(webView, cbId))
+                                        resultData = it.invoke(bean.`object`, Callback(webView, cbId))
                                     }
                                     Int::class.java.simpleName -> {
-                                        it.invoke(bean.`object`, data.toInt())
+                                        resultData = it.invoke(bean.`object`, data.toInt())
                                     }
                                     Double::class.java.simpleName -> {
-                                        it.invoke(bean.`object`, data.toDouble())
+                                        resultData = it.invoke(bean.`object`, data.toDouble())
                                     }
                                     Float::class.java.simpleName -> {
-                                        it.invoke(bean.`object`, data.toFloat())
+                                        resultData = it.invoke(bean.`object`, data.toFloat())
                                     }
                                     Boolean::class.java.simpleName -> {
-                                        it.invoke(bean.`object`, data.toBoolean())
+                                        resultData = it.invoke(bean.`object`, data.toBoolean())
                                     }
                                     else -> {
-                                        it.invoke(bean.`object`, data)
+                                        resultData = it.invoke(bean.`object`, data)
                                     }
                                 }
                             }
@@ -62,76 +64,76 @@ class BaseJavascriptInterface(private val webView: BaseWebView) {
                                 if (params1 == Callback::class.java.simpleName && params2 != Callback::class.java.simpleName) {
                                     when (params2) {
                                         Int::class.java.simpleName -> {
-                                            it.invoke(
-                                                bean.`object`,
-                                                Callback(webView, cbId),
-                                                data.toInt()
+                                            resultData = it.invoke(
+                                                    bean.`object`,
+                                                    Callback(webView, cbId),
+                                                    data.toInt()
                                             )
                                         }
                                         Double::class.java.simpleName -> {
-                                            it.invoke(
-                                                bean.`object`,
-                                                Callback(webView, cbId),
-                                                data.toDouble()
+                                            resultData = it.invoke(
+                                                    bean.`object`,
+                                                    Callback(webView, cbId),
+                                                    data.toDouble()
                                             )
                                         }
                                         Float::class.java.simpleName -> {
-                                            it.invoke(
-                                                bean.`object`,
-                                                Callback(webView, cbId),
-                                                data.toFloat()
+                                            resultData = it.invoke(
+                                                    bean.`object`,
+                                                    Callback(webView, cbId),
+                                                    data.toFloat()
                                             )
                                         }
                                         Boolean::class.java.simpleName -> {
-                                            it.invoke(
-                                                bean.`object`,
-                                                Callback(webView, cbId),
-                                                data.toBoolean()
+                                            resultData = it.invoke(
+                                                    bean.`object`,
+                                                    Callback(webView, cbId),
+                                                    data.toBoolean()
                                             )
                                         }
                                         else -> {
-                                            it.invoke(
-                                                bean.`object`,
-                                                Callback(webView, cbId),
-                                                data
+                                            resultData = it.invoke(
+                                                    bean.`object`,
+                                                    Callback(webView, cbId),
+                                                    data
                                             )
                                         }
                                     }
                                 } else if (params1 != Callback::class.java.simpleName && params2 == Callback::class.java.simpleName) {
                                     when (params1) {
                                         Int::class.java.simpleName -> {
-                                            it.invoke(
-                                                bean.`object`,
-                                                data.toInt(),
-                                                Callback(webView, cbId)
+                                            resultData = it.invoke(
+                                                    bean.`object`,
+                                                    data.toInt(),
+                                                    Callback(webView, cbId)
                                             )
                                         }
                                         Double::class.java.simpleName -> {
-                                            it.invoke(
-                                                bean.`object`,
-                                                data.toDouble(),
-                                                Callback(webView, cbId)
+                                            resultData = it.invoke(
+                                                    bean.`object`,
+                                                    data.toDouble(),
+                                                    Callback(webView, cbId)
                                             )
                                         }
                                         Float::class.java.simpleName -> {
-                                            it.invoke(
-                                                bean.`object`,
-                                                data.toFloat(),
-                                                Callback(webView, cbId)
+                                            resultData = it.invoke(
+                                                    bean.`object`,
+                                                    data.toFloat(),
+                                                    Callback(webView, cbId)
                                             )
                                         }
                                         Boolean::class.java.simpleName -> {
-                                            it.invoke(
-                                                bean.`object`,
-                                                data.toBoolean(),
-                                                Callback(webView, cbId)
+                                            resultData = it.invoke(
+                                                    bean.`object`,
+                                                    data.toBoolean(),
+                                                    Callback(webView, cbId)
                                             )
                                         }
                                         else -> {
-                                            it.invoke(
-                                                bean.`object`,
-                                                data,
-                                                Callback(webView, cbId)
+                                            resultData = it.invoke(
+                                                    bean.`object`,
+                                                    data,
+                                                    Callback(webView, cbId)
                                             )
                                         }
                                     }
@@ -146,6 +148,24 @@ class BaseJavascriptInterface(private val webView: BaseWebView) {
                     }
                 }
             }
+        }
+
+        return if (resultData == null) "" else resultData.toString()
+    }
+
+    /**
+     * Js回调数据给原生
+     */
+    @JavascriptInterface
+    fun jsCallbackDispatch(cbId: String, data: String, deleteCbId: Boolean) {
+        if (webView == null || TextUtils.isEmpty(cbId) || webView.callbackManager == null) {
+            return
+        }
+        val callbackManager: JsCallback? = webView.callbackManager[cbId]
+        callbackManager?.onCallback(data)
+        //移除回调
+        if (callbackManager != null && deleteCbId) {
+            webView.callbackManager.remove(cbId)
         }
     }
 

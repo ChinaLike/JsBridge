@@ -2,18 +2,25 @@ package com.core.web
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.alibaba.fastjson.JSON
 
 /**
- *
+ * 自定义WebView
  * @author like
  * @date 5/24/21 4:19 PM
  */
-abstract class BaseWebView : WebView,IWebView {
+open class BaseWebView : WebView, IWebView {
+
+    /**
+     * js回调管理
+     */
+    val callbackManager: MutableMap<String, JsCallback> = mutableMapOf()
 
     /**
      * 存放注入的对象
@@ -24,6 +31,8 @@ abstract class BaseWebView : WebView,IWebView {
      * 内部使用注入名称
      */
     val innerJavascriptInterfaceName: String = "JsWebViewBridge"
+
+    private var uniqueId = 0
 
     constructor(context: Context) : super(context) {
         initWebView()
@@ -42,10 +51,14 @@ abstract class BaseWebView : WebView,IWebView {
     }
 
     private fun initWebView() {
+        isVerticalScrollBarEnabled = false
+        isHorizontalScrollBarEnabled = false
         settings.javaScriptEnabled = true
-        webChromeClient = BaseWebChromeClient()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setWebContentsDebuggingEnabled(true)
+        }
         webViewClient = BaseWebViewClient()
-
+        webChromeClient = WebChromeClient()
         addJavascriptInterface(BaseJavascriptInterface(this), innerJavascriptInterfaceName)
     }
 
@@ -67,11 +80,76 @@ abstract class BaseWebView : WebView,IWebView {
         }
     }
 
+    /**
+     * 调用Js代码
+     * @param [function] js的方法
+     * @param [callback] 回调
+     */
+    override fun callJsFunction(function: String, callback: JsCallback) {
+        callJsFunction(function, "", callback)
+    }
+
+    /**
+     * 调用Js代码
+     * @param [function] js的方法
+     */
+    override fun callJsFunction(function: String) {
+        callJsFunction(function, "", object : JsCallback {
+            /**
+             * js回调给原生
+             */
+            override fun onCallback(callback: Any) {
+
+            }
+
+        })
+    }
+
+    /**
+     * 调用Js代码
+     * @param [function] js的方法
+     * @param [data] 传递给js的数据
+     * @param [callback] 回调
+     */
+    override fun callJsFunction(function: String, data: String, callback: JsCallback) {
+        post {
+            try {
+                uniqueId++
+                var cbIdStr = "${function}${System.currentTimeMillis()}${uniqueId}"
+                callbackManager[cbIdStr] = callback
+                val jsInject = JsInject(this)
+                var javascriptString =
+                    "${function}('${data}',${jsInject.callbackJsInject(cbIdStr)})"
+                Log.d("注入回调：",javascriptString)
+                loadUrl("javascript:$javascriptString")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+    }
+
+    /**
+     * 调用Js代码
+     * @param [function] js的方法
+     * @param [data] 传递给js的数据
+     */
+    override fun callJsFunction(function: String, data: String) {
+        callJsFunction(function, data, object : JsCallback {
+            /**
+             * js回调给原生
+             */
+            override fun onCallback(callback: Any) {
+
+            }
+        })
+    }
+
     @SuppressLint("JavascriptInterface")
     override fun addJavascriptInterface(`object`: Any, name: String) {
         if (name != "MiWebViewDetector" && name != innerJavascriptInterfaceName) {
             javascriptInterfaceList.add(JavascriptInterfaceBean(`object`, name))
-        }else{
+        } else {
             super.addJavascriptInterface(`object`, name)
         }
     }
@@ -81,14 +159,6 @@ abstract class BaseWebView : WebView,IWebView {
      */
     fun addJavascriptInterface(`object`: Any) {
         addJavascriptInterface(`object`, "")
-    }
-
-    override fun setWebChromeClient(client: WebChromeClient?) {
-        if (client is BaseWebChromeClient) {
-            super.setWebChromeClient(client)
-        } else {
-            throw IllegalArgumentException("请传入继承BaseWebChromeClient的WebChromeClient")
-        }
     }
 
     override fun setWebViewClient(client: WebViewClient) {

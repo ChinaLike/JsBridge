@@ -31,9 +31,11 @@ class JsBridgeToast(private val context: Context)  {
     }
 
     @JavascriptInterface
-    fun nativeArgAndCallback(params:String,callback: Callback){
+    fun nativeArgAndCallback(params:String,callback: Callback):Boolean{
         Toast.makeText(context,params,Toast.LENGTH_SHORT).show()
         callback.success()
+
+        return false
     }
 
     @JavascriptInterface

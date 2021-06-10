@@ -1,6 +1,7 @@
 package com.like.jsbridge;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,5 +24,14 @@ public class MainActivity extends AppCompatActivity {
 
         webView.loadUrl("file:///android_asset/test.html");
 
+        //调用Js无参数无回调
+        findViewById(R.id.jsNoArgAndNoCallback).setOnClickListener(v ->
+                webView.callJsFunction("jsNoArgAndNoCallback")
+                );
+
+
+
+//        findViewById(R.id.jsNoArgAndNoCallback).setOnClickListener(v ->
+//                webView.callJsFunction("jsNoArgAndNoCallback", "342s", callback -> Toast.makeText(MainActivity.this, "" + callback, Toast.LENGTH_SHORT).show()));
     }
 }

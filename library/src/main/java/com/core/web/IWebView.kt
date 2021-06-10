@@ -17,15 +17,38 @@ interface IWebView {
 
     /**
      * 调用Js代码
+     * @param [function] js的方法
+     * @param [callback] 回调
      */
-    fun callJsFunction(function:String){
-        // TODO: 6/1/21  
-    }
+    fun callJsFunction(function: String, callback: JsCallback)
+
+
+    /**
+     * 调用Js代码
+     * @param [function] js的方法
+     */
+    fun callJsFunction(function: String)
+
+    /**
+     * 调用Js代码
+     * @param [function] js的方法
+     * @param [data] 传递给js的数据
+     * @param [callback] 回调
+     */
+    fun callJsFunction(function: String, data: String, callback: JsCallback)
+
+
+    /**
+     * 调用Js代码
+     * @param [function] js的方法
+     * @param [data] 传递给js的数据
+     */
+    fun callJsFunction(function: String, data: String)
 
     /**
      * Js调用原生的名称
      */
-    fun jsCallName():String{
+    fun jsCallName(): String {
         return "JsBridge"
     }
 

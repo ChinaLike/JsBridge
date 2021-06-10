@@ -13,14 +13,16 @@
 		}
 		.item{
 			margin: 10;
-			background-color: aqua;
+			background-color: #19DDF6;
 			padding: 6;
+			height:40;
+			border:0px solid white;
+			color:white;
 		}
 	</style>
 
 <body>
 <div class="parent">
-    <h2 style="align-items: center; width: 100%;">js调用原生</h2>
     <input type="button" class="item" value="调用原生无参数无回调方法" onclick="nativeNoArgAndNoCallback()" />
     <input type="button" class="item" value="调用原生无参数有回调方法" onclick="nativeNoArgAndCallback()" />
     <input type="button" class="item" value="调用原生有参数无回调方法" onclick="nativeArgAndNoCallback()" />
@@ -33,6 +35,7 @@
 </div>
 </body>
 <script>
+
 
 		function nativeNoArgAndNoCallback(){
 			JsBridge.nativeNoArgAndNoCallback();
@@ -82,6 +85,11 @@
 				alert(error.data)
 			});
 		}
+
+		function jsNoArgAndNoCallback(){
+			alert("原生调用JS无参数无回调")
+		}
+
 	</script>
 
 </html>

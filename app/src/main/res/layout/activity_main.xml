@@ -1,13 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:text="原生调用Js"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/jsNoArgAndNoCallback"
+            android:layout_width="match_parent"
+            android:text="调用Js无参无回调"
+            android:layout_marginTop="10dp"
+            android:background="#19DDF6"
+            android:textColor="@color/white"
+            android:layout_height="40dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/jsNoArgAndCallback"
+            android:layout_width="match_parent"
+            android:text="调用Js无参有回调"
+            android:layout_marginTop="10dp"
+            android:background="#19DDF6"
+            android:textColor="@color/white"
+            android:layout_height="40dp"/>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/jsArgAndNoCallback"
+            android:layout_width="match_parent"
+            android:text="调用Js有参无回调"
+            android:layout_marginTop="10dp"
+            android:background="#19DDF6"
+            android:textColor="@color/white"
+            android:layout_height="40dp"/>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/jsArgAndCallback"
+            android:layout_width="match_parent"
+            android:text="调用Js有参有回调"
+            android:layout_marginTop="10dp"
+            android:background="#19DDF6"
+            android:textColor="@color/white"
+            android:layout_height="40dp"/>
+
+    </LinearLayout>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:text="Js调用原生"
+        android:textSize="20sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"/>
 
     <com.like.jsbridge.DemoWebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</RelativeLayout>
+</LinearLayout>
