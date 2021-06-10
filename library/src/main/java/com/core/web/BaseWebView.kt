@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -85,8 +84,8 @@ open class BaseWebView : WebView, IWebView {
      * @param [function] js的方法
      * @param [callback] 回调
      */
-    override fun callJsFunction(function: String, callback: JsCallback) {
-        callJsFunction(function, "", callback)
+    override fun callJsFunction(function: String, callback: JsCallback?) {
+        callJsFunction(function, null, callback)
     }
 
     /**
@@ -94,15 +93,7 @@ open class BaseWebView : WebView, IWebView {
      * @param [function] js的方法
      */
     override fun callJsFunction(function: String) {
-        callJsFunction(function, "", object : JsCallback {
-            /**
-             * js回调给原生
-             */
-            override fun onCallback(callback: Any) {
-
-            }
-
-        })
+        callJsFunction(function, null, null)
     }
 
     /**
@@ -111,17 +102,28 @@ open class BaseWebView : WebView, IWebView {
      * @param [data] 传递给js的数据
      * @param [callback] 回调
      */
-    override fun callJsFunction(function: String, data: String, callback: JsCallback) {
+    override fun callJsFunction(function: String, data: String?, callback: JsCallback?) {
         post {
             try {
-                uniqueId++
-                var cbIdStr = "${function}${System.currentTimeMillis()}${uniqueId}"
-                callbackManager[cbIdStr] = callback
-                val jsInject = JsInject(this)
-                var javascriptString =
-                    "${function}('${data}',${jsInject.callbackJsInject(cbIdStr)})"
-                Log.d("注入回调：",javascriptString)
-                loadUrl("javascript:$javascriptString")
+                var callbackJsStr: String? = null
+                if (callback != null) {
+                    uniqueId++
+                    var cbIdStr = "${function}${System.currentTimeMillis()}${uniqueId}"
+                    callbackManager[cbIdStr] = callback
+                    val jsInject = JsInject(this)
+                    callbackJsStr = jsInject.callbackJsInject(cbIdStr)
+                }
+                var loadJsStr: String? = null
+                if (data != null && callbackJsStr != null) {
+                    loadJsStr = "${function}('${data}',${callbackJsStr})"
+                } else if (data != null && callbackJsStr == null) {
+                    loadJsStr = "${function}('${data}')"
+                } else if (data == null && callbackJsStr != null) {
+                    loadJsStr = "${function}(${callbackJsStr})"
+                } else if (data == null && callbackJsStr == null) {
+                    loadJsStr = "${function}()"
+                }
+                loadJsStr?.let { loadUrl("javascript:$loadJsStr") }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -134,15 +136,8 @@ open class BaseWebView : WebView, IWebView {
      * @param [function] js的方法
      * @param [data] 传递给js的数据
      */
-    override fun callJsFunction(function: String, data: String) {
-        callJsFunction(function, data, object : JsCallback {
-            /**
-             * js回调给原生
-             */
-            override fun onCallback(callback: Any) {
-
-            }
-        })
+    override fun callJsFunction(function: String, data: String?) {
+        callJsFunction(function, data, null)
     }
 
     @SuppressLint("JavascriptInterface")

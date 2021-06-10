@@ -53,7 +53,16 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/jsArgAndCallback"
             android:layout_width="match_parent"
-            android:text="调用Js有参有回调"
+            android:text="调用Js有参有回调（可回调多次）"
+            android:layout_marginTop="10dp"
+            android:background="#19DDF6"
+            android:textColor="@color/white"
+            android:layout_height="40dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/jsArgAndDeleteCallback"
+            android:layout_width="match_parent"
+            android:text="调用Js有参有回调且只能回调一次"
             android:layout_marginTop="10dp"
             android:background="#19DDF6"
             android:textColor="@color/white"

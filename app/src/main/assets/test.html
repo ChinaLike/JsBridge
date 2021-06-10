@@ -87,7 +87,32 @@
 		}
 
 		function jsNoArgAndNoCallback(){
-			alert("原生调用JS无参数无回调")
+			alert("原生调用JS无参数无回调");
+		}
+
+		function jsNoArgAndCallback(callback){
+			alert("原生调用JS无参数有回调");
+			callback("我是JS回调数据");
+		}
+
+		function jsArgAndNoCallback(params){
+			alert(params);
+		}
+
+		function jsArgAndCallback(params,callback){
+			alert(params);
+			callback("我是JS第一次回调数据");
+			setTimeout(function() {
+				callback("我是JS第二次回调数据");
+			}, 500);
+		}
+
+		function jsArgAndDeleteCallback(params,callback){
+			alert(params);
+			callback("我是JS第一次回调数据",true);
+			setTimeout(function() {
+				callback("我是JS第二次回调数据");
+			}, 500);
 		}
 
 	</script>

@@ -20,7 +20,7 @@ interface IWebView {
      * @param [function] js的方法
      * @param [callback] 回调
      */
-    fun callJsFunction(function: String, callback: JsCallback)
+    fun callJsFunction(function: String, callback: JsCallback?)
 
 
     /**
@@ -35,7 +35,7 @@ interface IWebView {
      * @param [data] 传递给js的数据
      * @param [callback] 回调
      */
-    fun callJsFunction(function: String, data: String, callback: JsCallback)
+    fun callJsFunction(function: String, data: String?, callback: JsCallback?)
 
 
     /**
@@ -43,7 +43,7 @@ interface IWebView {
      * @param [function] js的方法
      * @param [data] 传递给js的数据
      */
-    fun callJsFunction(function: String, data: String)
+    fun callJsFunction(function: String, data: String?)
 
     /**
      * Js调用原生的名称
