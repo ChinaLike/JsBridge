@@ -27,7 +27,7 @@
 	
 ## 示例
 
-   ![演示视频](https://github.com/ChinaLike/JsBridge/tree/main/screenshots/1623390971414301.gif)
+   ![演示视频](https://github.com/ChinaLike/JsBridge/blob/main/screenshots/1623390971414301.gif)
 
    [请下载本工程，运行工程即可查看示例](https://github.com/ChinaLike/JsBridge)
 	
