@@ -1,6 +1,7 @@
 package com.core.web
 
 import com.core.util.ReflectUtil
+import com.core.web.base.BaseWebView
 
 /**
  * js注入管理类

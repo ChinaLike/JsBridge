@@ -1,5 +1,6 @@
 package com.core.web
 
+import com.core.web.base.BaseWebView
 import org.jetbrains.annotations.NotNull
 
 /**

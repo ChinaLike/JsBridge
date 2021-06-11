@@ -5,9 +5,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.core.web.JsBridgeWebView;
+
 public class MainActivity extends AppCompatActivity {
 
-    private DemoWebView webView;
+    private JsBridgeWebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,8 +18,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         webView = findViewById(R.id.webView);
-
-        webView.getSettings().setJavaScriptEnabled(true);
 
         webView.addJavascriptInterface(new JsBridgeToast(this));
         webView.addJavascriptInterface(new JsBridgeDialog(this));

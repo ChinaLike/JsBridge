@@ -80,7 +80,7 @@
         android:textStyle="bold"
         android:layout_height="wrap_content"/>
 
-    <com.like.jsbridge.DemoWebView
+    <com.core.web.JsBridgeWebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
