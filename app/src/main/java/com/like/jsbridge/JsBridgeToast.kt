@@ -31,17 +31,15 @@ class JsBridgeToast(private val context: Context)  {
     }
 
     @JavascriptInterface
-    fun nativeArgAndCallback(params:String,callback: Callback):Boolean{
+    fun nativeArgAndCallback(params:String,callback: Callback){
         Toast.makeText(context,params,Toast.LENGTH_SHORT).show()
         callback.success()
-
-        return false
     }
 
     @JavascriptInterface
     fun nativeDeleteCallback(params:String,callback: Callback){
         Toast.makeText(context,params,Toast.LENGTH_SHORT).show()
-        callback.success(isDelete = true)
+        callback.success(true)
         Handler().postDelayed(Runnable {
             callback.error(1,"错误回调")
         },3000)
@@ -50,7 +48,7 @@ class JsBridgeToast(private val context: Context)  {
     @JavascriptInterface
     fun nativeNoDeleteCallback(params:String,callback: Callback){
         Toast.makeText(context,params,Toast.LENGTH_SHORT).show()
-        callback.success(isDelete = false)
+        callback.success(false)
         Handler().postDelayed(Runnable {
             callback.error(1,"错误回调")
         },3000)

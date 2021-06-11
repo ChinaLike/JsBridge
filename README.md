@@ -22,7 +22,7 @@
 > Step 2. 然后在 build.gradle(Module:XXX) 的 dependencies 添加:
 
 	dependencies {
-           implementation 'com.github.ChinaLike:JsBridge::0.0.1'
+           implementation 'com.github.ChinaLike:JsBridge:0.0.1'
 	}
 	
 ## 示例
@@ -87,7 +87,7 @@
     ```
     由于安全原因，所有需要被Js调用的方法必有`@JavascriptInterface`注解
     
-2. 添加JsBridgeToast到JsBridgeWebView,参考[MainActivity](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/java/com/like/jsbridge/MainActivity.java)
+2. 添加JsBridgeToast到JsBridgeWebView,参考：[MainActivity](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/java/com/like/jsbridge/MainActivity.java)
     
     ```
     webView = findViewById(R.id.webView);
@@ -100,7 +100,7 @@
     JsBridge.nativeNoArgAndNoCallback();
     ```
     
-4. 在Java中调用 Javascript API,参考[MainActivity](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/java/com/like/jsbridge/MainActivity.java)
+4. 在Java中调用 Javascript API,参考：[MainActivity](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/java/com/like/jsbridge/MainActivity.java)
     
     ```
     webView.callJsFunction("jsArgAndDeleteCallback", "原生传递过来的参数", callback -> Toast.makeText(MainActivity.this, "" + callback, Toast.LENGTH_SHORT).show())

@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         //调用Js无参数有回调
         findViewById(R.id.jsNoArgAndCallback).setOnClickListener(v ->
-                webView.callJsFunction("jsNoArgAndCallback", callback -> Toast.makeText(MainActivity.this, "" + callback, Toast.LENGTH_SHORT).show())
+                webView.callJsFunction("jsNoArgAndCallback", callback -> Toast.makeText(this, "" + callback, Toast.LENGTH_SHORT).show())
         );
 
         //调用Js有参数无回调
@@ -41,17 +41,14 @@ public class MainActivity extends AppCompatActivity {
 
         //调用Js有参数有回调（可回调多次）
         findViewById(R.id.jsArgAndCallback).setOnClickListener(v ->
-                webView.callJsFunction("jsArgAndCallback", "原生传递过来的参数", callback -> Toast.makeText(MainActivity.this, "" + callback, Toast.LENGTH_SHORT).show())
-
+                webView.callJsFunction("jsArgAndCallback", "原生传递过来的参数", callback -> Toast.makeText(this, "" + callback, Toast.LENGTH_SHORT).show())
         );
 
         //调用Js有参数有回调（只能回调一次）
         findViewById(R.id.jsArgAndDeleteCallback).setOnClickListener(v ->
-                webView.callJsFunction("jsArgAndDeleteCallback", "原生传递过来的参数", callback -> Toast.makeText(MainActivity.this, "" + callback, Toast.LENGTH_SHORT).show())
+                webView.callJsFunction("jsArgAndDeleteCallback", "原生传递过来的参数", callback -> Toast.makeText(this, "" + callback, Toast.LENGTH_SHORT).show())
 
         );
-
-
-
+        
     }
 }

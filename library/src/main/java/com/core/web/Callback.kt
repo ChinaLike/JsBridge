@@ -27,6 +27,14 @@ class Callback(private val webView: BaseWebView, private val cbId: String) {
 
     /**
      * 成功的回调
+     * @param [isDelete] 是否删除回调，true 删除后本次回调结束 ， false 可以再次回调
+     */
+    fun success(isDelete: Boolean){
+        success(CallbackBean(0, "成功", null), isDelete)
+    }
+
+    /**
+     * 成功的回调
      * @param [successData] 成功回调的数据
      * @param [isDelete] 是否删除回调
      */
