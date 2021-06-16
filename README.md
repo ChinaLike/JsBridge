@@ -136,7 +136,7 @@ class JsBridgeToast(private val context: Context)  {
 }
 ```
 
-## 新建MainActivity和xml文件,参考：[MainActivityKotlin](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/java/com/like/jsbridge/MainActivityKotlin.java)和[activity_main](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/res/layout/activity_main.xml)
+## 新建MainActivity和xml文件,参考：[MainActivityKotlin](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/java/com/like/jsbridge/MainActivityKotlin.kt)和[activity_main](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/res/layout/activity_main.xml)
 
 + 在xml文件中引入JsBridgeWebView
 
