@@ -70,7 +70,7 @@
 > Step 2. 然后在 build.gradle(Module:XXX) 的 dependencies 添加:
 
 	dependencies {
-           implementation 'com.github.ChinaLike:JsBridge:0.0.1'
+           implementation 'com.github.ChinaLike:JsBridge:0.0.2'
 	}
         
 ## 新建Js调用原生方法的类，参考：[JsBridgeToast](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/java/com/like/jsbridge/JsBridgeToast.kt)
