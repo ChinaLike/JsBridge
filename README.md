@@ -146,7 +146,7 @@ class JsBridgeToast(private val context: Context)  {
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 ```
-> 当然，如果没有特殊需要使用`JsBridgeWebView`就可以了，如果有定制WebView，则引入自己定制那个WebView就可以了，但是自定义的WebView需要继承[BaseWebView](https://github.com/ChinaLike/JsBridge/blob/main/library/src/main/java/com/core/web/base/BaseWebView.kt)
+> 当然，如果没有特殊需要使用`JsBridgeWebView`就可以了，如果有定制WebView，则引入自己定制那个WebView就可以了，但是自定义的WebView需要继承[JsBridgeWebView](https://github.com/ChinaLike/JsBridge/blob/main/library/src/main/java/com/core/web/JsBridgeWebView.kt)
 
 + 在Activity中调用`addJavascriptInterface`添加
 

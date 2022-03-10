@@ -15,7 +15,7 @@ import com.core.web.*
  * @author like
  * @date 5/24/21 4:19 PM
  */
-open class BaseWebView : WebView, IWebView {
+abstract class BaseWebView : WebView, IWebView {
 
     /**
      * js回调管理
@@ -38,11 +38,11 @@ open class BaseWebView : WebView, IWebView {
         initWebView()
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initWebView()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(
         context,
         attrs,
         defStyle
@@ -51,8 +51,6 @@ open class BaseWebView : WebView, IWebView {
     }
 
     private fun initWebView() {
-        isVerticalScrollBarEnabled = false
-        isHorizontalScrollBarEnabled = false
         settings.javaScriptEnabled = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setWebContentsDebuggingEnabled(true)

@@ -1,5 +1,6 @@
 package com.core.web.base
 
+import android.graphics.Bitmap
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -22,8 +23,8 @@ open class BaseWebViewClient : WebViewClient() {
     private val injectUrl = mutableListOf<String>()
 
     @CallSuper
-    override fun onPageFinished(view: WebView, url: String) {
-        super.onPageFinished(view, url)
+    override fun onPageStarted(view: WebView?, url: String, favicon: Bitmap?) {
+        super.onPageStarted(view, url, favicon)
         if (view is BaseWebView && !injectUrl.contains(url)) {
             if (jsInject == null) {
                 jsInject = JsInject(view)
