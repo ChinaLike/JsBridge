@@ -1,6 +1,7 @@
 package com.core.web.base
 
 import android.graphics.Bitmap
+import android.os.Build
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -25,11 +26,28 @@ open class BaseWebViewClient : WebViewClient() {
     @CallSuper
     override fun onPageStarted(view: WebView?, url: String, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
-        if (view is BaseWebView && !injectUrl.contains(url)) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            (view as? BaseWebView)?.let { inject(it, url) }
+        }
+    }
+
+    @CallSuper
+    override fun onPageFinished(view: WebView?, url: String) {
+        super.onPageFinished(view, url)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            (view as? BaseWebView)?.let { inject(it, url) }
+        }
+    }
+
+    /**
+     * 注入Js
+     */
+    private fun inject(webView: BaseWebView, url: String) {
+        if (!injectUrl.contains(url)) {
             if (jsInject == null) {
-                jsInject = JsInject(view)
+                jsInject = JsInject(webView)
             }
-            view.loadUrl("javascript:" + jsInject!!.injectJs())
+            webView.loadUrl("javascript:" + jsInject!!.injectJs())
             if (BuildConfig.DEBUG) {
                 Log.d("注入的数据", jsInject!!.injectJs())
             }
