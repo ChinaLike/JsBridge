@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
+import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -161,6 +162,16 @@ abstract class BaseWebView : WebView, IWebView {
         } else {
             throw IllegalArgumentException("请传入继承BaseWebViewClient的WebViewClient")
         }
+    }
+
+    /**
+     * 是否注入成功
+     */
+    final override fun isInjectSuccess(callback: (success: Boolean) -> Unit) {
+        evaluateJavascript("javascript:${injectVerifyMethod()}()",
+            ValueCallback {
+                callback(it == "true")
+            })
     }
 
 }
