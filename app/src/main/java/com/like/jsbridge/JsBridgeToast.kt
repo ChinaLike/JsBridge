@@ -7,13 +7,14 @@ import android.webkit.JavascriptInterface
 import android.widget.Toast
 import com.core.web.Callback
 import com.core.web.CallbackBean
+import com.core.web.base.IJavascriptInterface
 
 /**
  * 测试类
  * @author like
  * @date 5/26/21 4:43 PM
  */
-class JsBridgeToast(private val context: Context)  {
+class JsBridgeToast(private val context: Context):IJavascriptInterface  {
 
     @JavascriptInterface
     fun nativeNoArgAndNoCallback(){

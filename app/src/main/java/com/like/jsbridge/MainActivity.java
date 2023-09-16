@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         webView.addJavascriptInterface(new JsBridgeToast(this));
         webView.addJavascriptInterface(new JsBridgeDialog(this));
+        webView.addJavascriptInterface(new ConstantJsBridge(this),webView.jsCallName() + "Constant");
 
         webView.loadUrl("file:///android_asset/test.html");
 

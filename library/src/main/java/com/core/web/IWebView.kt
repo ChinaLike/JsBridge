@@ -52,7 +52,6 @@ interface IWebView {
         return "JsBridge"
     }
 
-
     /**
      * 获取js的Window，可不用重写，如果遇到window对象不对可以使用这个重新赋值window
      */

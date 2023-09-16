@@ -5,13 +5,14 @@ import android.webkit.JavascriptInterface
 import androidx.appcompat.app.AlertDialog
 import com.alibaba.fastjson.JSON
 import com.core.web.Callback
+import com.core.web.base.IJavascriptInterface
 
 /**
  *
  * @author like
  * @date 6/1/21 5:28 PM
  */
-class JsBridgeDialog(private val context: Context) {
+class JsBridgeDialog(private val context: Context): IJavascriptInterface {
 
     @JavascriptInterface
     fun nativeDialog(params: String, callback: Callback) {

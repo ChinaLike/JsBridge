@@ -35,6 +35,11 @@ abstract class BaseWebView : WebView, IWebView {
 
     private var uniqueId = 0
 
+    /**
+     * 常量注入次数
+     */
+    private var constantInjectCount: Int = 0
+
     constructor(context: Context) : super(context) {
         initWebView()
     }
@@ -142,7 +147,7 @@ abstract class BaseWebView : WebView, IWebView {
 
     @SuppressLint("JavascriptInterface")
     override fun addJavascriptInterface(`object`: Any, name: String) {
-        if (name != "MiWebViewDetector" && name != innerJavascriptInterfaceName) {
+        if (`object` is IJavascriptInterface) {
             javascriptInterfaceList.add(JavascriptInterfaceBean(`object`, name))
         } else {
             super.addJavascriptInterface(`object`, name)
@@ -152,7 +157,7 @@ abstract class BaseWebView : WebView, IWebView {
     /**
      * 添加需要注入的类
      */
-    fun addJavascriptInterface(`object`: Any) {
+    fun addJavascriptInterface(`object`: IJavascriptInterface) {
         addJavascriptInterface(`object`, "")
     }
 

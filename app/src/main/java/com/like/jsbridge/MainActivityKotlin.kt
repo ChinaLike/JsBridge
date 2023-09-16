@@ -15,6 +15,7 @@ class MainActivityKotlin : AppCompatActivity() {
         webView = findViewById(R.id.webView)
         webView?.addJavascriptInterface(JsBridgeToast(this))
         webView?.addJavascriptInterface(JsBridgeDialog(this))
+        webView?.addJavascriptInterface(ConstantJsBridge(this),webView?.jsCallName() + "Constant")
         webView?.loadUrl("file:///android_asset/test.html")
 
         //调用Js无参数无回调
