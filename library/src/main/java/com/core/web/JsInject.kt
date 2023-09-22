@@ -17,12 +17,6 @@ class JsInject(private val webView: BaseWebView) {
         val innerJavascriptInterfaceName = webView.innerJavascriptInterfaceName
         var jsStringBuffer = StringBuffer()
 
-        //注入一个检测方法
-        jsStringBuffer.append(
-            "\n\t\tfunction ${webView.injectVerifyMethod()}(){\n" +
-                    "\t\t\treturn window.${webView.jsCallName()} !=null\n" +
-                    "\t\t}\n"
-        )
         //注入内容
         jsStringBuffer.append(
             "\n\t\t(function(){\n" +

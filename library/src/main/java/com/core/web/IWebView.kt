@@ -60,13 +60,6 @@ interface IWebView {
     }
 
     /**
-     * 注入检测方法
-     */
-    fun injectVerifyMethod(): String {
-        return "isInjectSuccess"
-    }
-
-    /**
      * 注入Js是否成功
      */
     fun isInjectSuccess(callback: (success: Boolean) -> Unit)

@@ -1,6 +1,7 @@
 package com.like.jsbridge
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Handler
 import android.util.Log
 import android.webkit.JavascriptInterface
@@ -58,5 +59,20 @@ class JsBridgeToast(private val context: Context):IJavascriptInterface  {
     @JavascriptInterface
     fun nativeSyncCallback():String{
         return "原生同步回调"
+    }
+
+    @JavascriptInterface
+    fun statusHeight():Int{
+        var result = 0
+        val resourceId = context.resources
+            .getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            result = context.resources.getDimensionPixelSize(resourceId)
+        }
+        return px2dp(result.toFloat())
+    }
+
+    fun px2dp(pxValue: Float): Int {
+        return (pxValue / Resources.getSystem().displayMetrics.density + 0.5F).toInt()
     }
 }

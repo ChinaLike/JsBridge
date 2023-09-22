@@ -1,5 +1,6 @@
 package com.like.jsbridge;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -9,7 +10,7 @@ import com.core.web.JsBridgeWebView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private JsBridgeWebView webView;
+    private CustomWebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +22,16 @@ public class MainActivity extends AppCompatActivity {
 
         webView.addJavascriptInterface(new JsBridgeToast(this));
         webView.addJavascriptInterface(new JsBridgeDialog(this));
-        webView.addJavascriptInterface(new ConstantJsBridge(this),webView.jsCallName() + "Constant");
+        webView.addJavascriptInterface(new ConstantJsBridge(this),webView.jsCallSynchronizeCallbackName());
+
 
         webView.loadUrl("file:///android_asset/test.html");
+
+        //跳转H5
+        findViewById(R.id.skipWeb).setOnClickListener(v ->{
+            Intent intent = new Intent(this, WebActivity.class);
+            startActivity(intent);
+        });
 
         //调用Js无参数无回调
         findViewById(R.id.jsNoArgAndNoCallback).setOnClickListener(v ->

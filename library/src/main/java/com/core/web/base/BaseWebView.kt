@@ -173,9 +173,9 @@ abstract class BaseWebView : WebView, IWebView {
      * 是否注入成功
      */
     final override fun isInjectSuccess(callback: (success: Boolean) -> Unit) {
-        evaluateJavascript("javascript:${injectVerifyMethod()}()",
+        evaluateJavascript("javascript:${getWindow()}.${jsCallName()} === undefined",
             ValueCallback {
-                callback(it == "true")
+                callback(it != "true")
             })
     }
 

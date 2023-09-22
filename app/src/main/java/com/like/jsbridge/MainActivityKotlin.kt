@@ -8,14 +8,14 @@ import com.core.web.JsBridgeWebView
 import com.core.web.JsCallback
 
 class MainActivityKotlin : AppCompatActivity() {
-    private var webView: JsBridgeWebView? = null
+    private var webView: CustomWebView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         webView = findViewById(R.id.webView)
         webView?.addJavascriptInterface(JsBridgeToast(this))
         webView?.addJavascriptInterface(JsBridgeDialog(this))
-        webView?.addJavascriptInterface(ConstantJsBridge(this),webView?.jsCallName() + "Constant")
+        webView?.addJavascriptInterface(ConstantJsBridge(this),webView?.jsCallSynchronizeCallbackName()?:"")
         webView?.loadUrl("file:///android_asset/test.html")
 
         //调用Js无参数无回调

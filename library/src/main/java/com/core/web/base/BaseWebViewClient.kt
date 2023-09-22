@@ -2,6 +2,7 @@ package com.core.web.base
 
 import android.graphics.Bitmap
 import android.util.Log
+import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.CallSuper
@@ -29,6 +30,18 @@ open class BaseWebViewClient : WebViewClient() {
         (view as? BaseWebView)?.let { inject(it, url) }
     }
 
+    @CallSuper
+    override fun onPageCommitVisible(view: WebView?, url: String) {
+        super.onPageCommitVisible(view, url)
+        (view as? BaseWebView)?.let { inject(it, url) }
+    }
+
+    @CallSuper
+    override fun onPageFinished(view: WebView?, url: String) {
+        super.onPageFinished(view, url)
+        (view as? BaseWebView)?.let { inject(it, url) }
+    }
+
     /**
      * 注入Js
      */
@@ -38,7 +51,7 @@ open class BaseWebViewClient : WebViewClient() {
                 if (jsInject == null) {
                     jsInject = JsInject(webView)
                 }
-                webView.loadUrl("javascript:" + jsInject!!.injectJs())
+                webView.evaluateJavascript("javascript:" + jsInject!!.injectJs(), ValueCallback { })
                 if (BuildConfig.DEBUG) {
                     Log.d("注入的数据", jsInject!!.injectJs())
                 }
