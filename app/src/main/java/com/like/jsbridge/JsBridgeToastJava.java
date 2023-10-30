@@ -6,12 +6,13 @@ import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
 import com.core.web.Callback;
+import com.core.web.base.IJavascriptInterface;
 
 /**
  * @author like
  * @date 6/11/21 5:31 PM
  */
-class JsBridgeToastJava {
+class JsBridgeToastJava implements IJavascriptInterface {
 
     private Context context;
 

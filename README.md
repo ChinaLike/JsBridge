@@ -70,10 +70,12 @@
 > Step 2. 然后在 build.gradle(Module:XXX) 的 dependencies 添加:
 
 	dependencies {
-           implementation 'com.github.ChinaLike:JsBridge:0.0.2'
+           implementation 'com.github.ChinaLike:JsBridge:x.x.x'//x.x.x换成最新的版本号
 	}
         
 ## 新建Js调用原生方法的类，参考：[JsBridgeToast](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/java/com/like/jsbridge/JsBridgeToast.kt)
+
+> 注意：桥梁类需要实现`IJavascriptInterface`接口，如果不实现则是普通的桥梁类
 
 ```js
 package com.like.jsbridge
@@ -86,7 +88,7 @@ import android.widget.Toast
 import com.core.web.Callback
 import com.core.web.CallbackBean
 
-class JsBridgeToast(private val context: Context)  {
+class JsBridgeToast(private val context: Context) : IJavascriptInterface  {
 
     @JavascriptInterface
     fun nativeNoArgAndNoCallback(){
@@ -166,7 +168,7 @@ class MainActivityKotlin : AppCompatActivity() {
 }
 ```
 
-> `注意：`webView的`addJavascriptInterface`方法可以多次调用，开发时可以根据业务功能进行解耦，`addJavascriptInterface`方法支持传递一个或两个参数，传递两个参数时第二个参数无效。
+> 注意：webView的`addJavascriptInterface`方法可以多次调用，开发时可以根据业务功能进行解耦，`addJavascriptInterface`方法支持传递一个或两个参数，传递两个参数时第二个参数无效。但是如果没有实现`IJavascriptInterface`接口的类第二个参数应该传递自己想要的
 
 ## 在Js中调用原生方法，参考：[test.html](https://github.com/ChinaLike/JsBridge/blob/main/app/src/main/assets/test.html)
 
