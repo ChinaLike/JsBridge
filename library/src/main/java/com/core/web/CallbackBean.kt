@@ -6,7 +6,7 @@ package com.core.web
  * @date 5/24/21 4:29 PM
  */
 data class CallbackBean(
-    var code:Int,
-    var message:String,
-    var data:Any?
+    val code:Int,
+    val message:String,
+    val data:Any?
 )
