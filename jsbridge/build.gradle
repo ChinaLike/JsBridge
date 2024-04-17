@@ -38,8 +38,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.alibaba:fastjson:1.1.72.android'
-//    api project(':jsbridge-annotation')
-    api 'com.github.ChinaLike:jsbridge-annotation:0.1.0'
+    api project(':jsbridge-annotation')
+//    api 'com.github.ChinaLike:jsbridge-annotation:0.1.0'
 }
 
 //==============================JitPack 上传插件配置 start=====================

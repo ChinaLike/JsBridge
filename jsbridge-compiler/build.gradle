@@ -1,6 +1,8 @@
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
+    id("maven")
+    id 'maven-publish'
 }
 
 java {
@@ -9,8 +11,7 @@ java {
 }
 
 dependencies{
-//    implementation(project(":jsbridge-annotation"))
-    implementation 'com.github.ChinaLike:jsbridge-annotation:0.1.0'
+    implementation(project(":jsbridge-annotation"))
 
     annotationProcessor("com.google.auto.service:auto-service:1.0-rc7")
     compileOnly("com.google.auto.service:auto-service-annotations:1.0-rc7")
@@ -20,17 +21,20 @@ dependencies{
     implementation("com.alibaba:fastjson:1.2.69")
 }
 
-//==============================JitPack 上传插件配置 start=====================
-apply plugin: 'com.github.dcendents.android-maven'
-//组名 com.github是固定的,后面的ChinaLike是我Github的用户名,替换成你自己的就可以了
 group='com.github.ChinaLike'
+version='0.1.1'
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.java
+                groupId = 'com.github.ChinaLike'
+                artifactId = 'jsbridge-compiler'
+                version = '0.1.1'
+            }
+        }
     }
 }
-//==============================JitPack 上传插件配置 end=======================
+
