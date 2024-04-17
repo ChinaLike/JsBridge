@@ -13,13 +13,6 @@ class CustomWebView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
-) :
-    JsBridgeWebView(context, attrs, defStyle) {
+) : JsBridgeWebView(context, attrs, defStyle) {
 
-    /**
-     * 同步回调名称
-     */
-    fun jsCallSynchronizeCallbackName(): String {
-        return jsCallName() + "Synchronize"
-    }
 }

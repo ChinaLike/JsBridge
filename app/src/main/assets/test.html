@@ -38,7 +38,7 @@
 </body>
 <script>
 
-        alert(window.JsBridgeSynchronize.statusHeight())
+        alert("状态栏高度："+JsBridge.statusHeight());
 
 		function nativeNoArgAndNoCallback(){
 			JsBridge.nativeNoArgAndNoCallback();
@@ -90,7 +90,7 @@
 		}
 
 		function nativeSyncCallback(){
-			var  result = JsBridge.nativeSyncCallback("");
+			var  result = JsBridge.nativeSyncCallback();
 			alert(result)
 		}
 

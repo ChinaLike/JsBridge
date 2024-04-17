@@ -1,3 +1,6 @@
-include ':library'
+include ':jsbridge'
 include ':app'
 rootProject.name = "JsBridge"
+include ':jsbridge-annotation'
+include ':jsbridge-compiler'
+include ':testGroup'

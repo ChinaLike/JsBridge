@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+<p>
+	<input type="button" id="enter" value="发消息给Native" onclick="testClick()" />
+	<input type="button" id="enter" value="发消息给Native" onclick="testClick1()" />
+</p>
+</body>
+
+<script>
+		alert(JsBridge.method1());
+
+		(function(){
+
+
+			JsBridge.method2 = function(data){
+				console.log(11111);
+					try{
+						var fn = eval('window.JsBridge.jsbridge_app_method2');
+						console.log(2222);
+						if (typeof fn === 'function'){
+							console.log(333);
+						 	return fn.call(window.JsBridge,"","");
+					 	}
+					}catch(e){
+						console.log(e);
+					}
+			};
+
+			alert(JsBridge.statusHeight());
+
+		})();
+
+
+		function testClick() {
+			var result = JsBridge.method2(1);
+			alert(result);
+		}
+
+		function jsNoArgAndNoCallback(params,callback){
+			alert(JSON.stringify(params))
+			callback(2345)
+		}
+		
+	</script>
+
+</html>

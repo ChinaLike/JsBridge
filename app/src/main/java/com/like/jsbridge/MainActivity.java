@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.core.web.JsBridgeWebView;
+import com.like.jsbridge.bridge.CustomJavascriptBridgeJava;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,15 +20,14 @@ public class MainActivity extends AppCompatActivity {
 
         webView = findViewById(R.id.webView);
 
-        webView.addJavascriptInterface(new JsBridgeToast(this));
-        webView.addJavascriptInterface(new JsBridgeDialog(this));
-        webView.addJavascriptInterface(new ConstantJsBridge(this),webView.jsCallSynchronizeCallbackName());
+        webView.setGroup("customJava");
 
+        webView.addJavascriptInterface(new CustomJavascriptBridgeJava(this));
 
         webView.loadUrl("file:///android_asset/test.html");
 
         //跳转H5
-        findViewById(R.id.skipWeb).setOnClickListener(v ->{
+        findViewById(R.id.skipWeb).setOnClickListener(v -> {
             Intent intent = new Intent(this, WebActivity.class);
             startActivity(intent);
         });
@@ -58,6 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 webView.callJsFunction("jsArgAndDeleteCallback", "原生传递过来的参数", callback -> Toast.makeText(this, "" + callback, Toast.LENGTH_SHORT).show())
 
         );
-        
+
     }
 }
