@@ -39,6 +39,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.alibaba:fastjson:1.1.72.android'
-    implementation project(':jsbridge-annotation')
-    kapt project(':jsbridge-compiler')
+//    implementation project(':jsbridge-annotation')
+//    kapt project(':jsbridge-compiler')
+
+    implementation 'com.github.ChinaLike.JsBridge:jsbridge:0.1.1'
+    kapt 'com.github.ChinaLike.JsBridge:jsbridge-compiler:0.1.1'
 }

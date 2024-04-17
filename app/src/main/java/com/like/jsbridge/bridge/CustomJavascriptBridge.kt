@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Handler
+import android.util.Log
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 import com.alibaba.fastjson.JSON
@@ -21,52 +22,52 @@ import com.like.jsbridge.CustomBean
 @JavascriptBridge("custom")
 class CustomJavascriptBridge(private val context: Context) {
     @JavascriptInterface
-    fun nativeNoArgAndNoCallback(){
-        Toast.makeText(context,"调用原生无参数无回调方法",Toast.LENGTH_SHORT).show()
+    fun nativeNoArgAndNoCallback() {
+        Toast.makeText(context, "调用原生无参数无回调方法", Toast.LENGTH_SHORT).show()
     }
 
     @JavascriptInterface
-    fun nativeNoArgAndCallback(callback: Callback){
+    fun nativeNoArgAndCallback(callback: Callback) {
         callback.success("成功回调")
     }
 
     @JavascriptInterface
-    fun nativeArgAndNoCallback(params:String){
-        Toast.makeText(context,params,Toast.LENGTH_SHORT).show()
+    fun nativeArgAndNoCallback(params: String) {
+        Toast.makeText(context, params, Toast.LENGTH_SHORT).show()
     }
 
     @JavascriptInterface
-    fun nativeArgAndCallback(params:String,callback: Callback){
-        Toast.makeText(context,params,Toast.LENGTH_SHORT).show()
+    fun nativeArgAndCallback(params: String, callback: Callback) {
+        Toast.makeText(context, params, Toast.LENGTH_SHORT).show()
         callback.success("成功回调")
     }
 
     @JavascriptInterface
-    fun nativeDeleteCallback(params:String,callback: Callback){
-        Toast.makeText(context,params,Toast.LENGTH_SHORT).show()
+    fun nativeDeleteCallback(params: String, callback: Callback) {
+        Toast.makeText(context, params, Toast.LENGTH_SHORT).show()
         callback.success(true)
         Handler().postDelayed(Runnable {
-            callback.callback(1,"失败",null)
-        },3000)
+            callback.callback(1, "失败", null)
+        }, 3000)
     }
 
     @JavascriptInterface
-    fun nativeNoDeleteCallback(params:String,callback: Callback){
-        Toast.makeText(context,params,Toast.LENGTH_SHORT).show()
+    fun nativeNoDeleteCallback(params: String, callback: Callback) {
+        Toast.makeText(context, params, Toast.LENGTH_SHORT).show()
         callback.success(false)
         Handler().postDelayed(Runnable {
-            callback.callback(1,"失败",null)
-        },3000)
+            callback.callback(1, "失败", null)
+        }, 3000)
     }
 
     @JavascriptInterface
-    fun nativeSyncCallback():String{
+    fun nativeSyncCallback(): String {
         return "原生同步回调"
     }
 
     @JavascriptInterface
     fun nativeDialog(params: String?, successCallback: Callback, failCallback: Callback) {
-        val bean = JSON.parseObject(params,CustomBean::class.java)
+        val bean = JSON.parseObject(params, CustomBean::class.java)
         AlertDialog.Builder(context)
             .setTitle(bean.title)
             .setMessage(bean.content)
@@ -86,7 +87,7 @@ class CustomJavascriptBridge(private val context: Context) {
     }
 
     @JavascriptInterface
-    fun statusHeight():Int{
+    fun statusHeight(): Int {
         var result = 0
         val resourceId = context.resources
             .getIdentifier("status_bar_height", "dimen", "android")

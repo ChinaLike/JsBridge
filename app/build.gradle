@@ -19,11 +19,11 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -50,7 +50,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation project(path: ':jsbridge')
     implementation project(path: ':testGroup')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -62,7 +61,10 @@ dependencies {
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
     implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.2.2'
 
-    kapt project(':jsbridge-compiler')
+//    implementation project(path: ':jsbridge')
+//    kapt project(':jsbridge-compiler')
+    implementation 'com.github.ChinaLike.JsBridge:jsbridge:0.1.1'
+    kapt 'com.github.ChinaLike.JsBridge:jsbridge-compiler:0.1.1'
 
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }

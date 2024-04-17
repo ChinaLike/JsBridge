@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.like.jsbridge.CustomBean {*;}
+-keep class kotlin.** { *; }
+
+-keep class org.jetbrains.** { *; }
+
