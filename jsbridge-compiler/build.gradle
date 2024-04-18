@@ -21,18 +21,12 @@ dependencies{
     implementation("com.alibaba:fastjson:1.2.69")
 }
 
-group='com.github.ChinaLike'
-version='0.1.1'
-
 afterEvaluate {
     publishing {
         publications {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
                 from components.java
-                groupId = 'com.github.ChinaLike'
-                artifactId = 'jsbridge-compiler'
-                version = '0.1.1'
             }
         }
     }

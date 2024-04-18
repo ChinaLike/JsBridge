@@ -13,18 +13,12 @@ java {
     withJavadocJar()
 }
 
-group='com.github.ChinaLike'
-version='0.1.1'
-
 afterEvaluate {
     publishing {
         publications {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
                 from components.java
-                groupId = 'com.github.ChinaLike'
-                artifactId = 'jsbridge-annotation'
-                version = '0.1.1'
             }
         }
     }

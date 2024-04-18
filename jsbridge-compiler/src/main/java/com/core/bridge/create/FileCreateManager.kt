@@ -19,7 +19,6 @@ import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
-import java.lang.reflect.Type
 import javax.annotation.processing.Filer
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.VariableElement
@@ -35,6 +34,8 @@ class FileCreateManager(private val mFiler: Filer, private val elementUtils: Ele
     private val stringTypeName = ClassName.get(String::class.java)
 
     private val objectTypeName = ClassName.get(Object::class.java)
+
+    private val callbackTypeName = ClassName.get(Callback::class.java)
 
     /**
      * 写Java文件
@@ -143,25 +144,7 @@ class FileCreateManager(private val mFiler: Filer, private val elementUtils: Ele
         }
         val builder = CodeBlock.builder()
         builder.add("\$T obj = getObjectInstance(\$S);\n", Any::class.java, bridgeMeta.destination)
-        val methodParamsType: MutableList<Type> = mutableListOf()
-        bridgeMeta.parameters.forEach {
-            if (TypeName.get(it.asType()).toString() == stringTypeName.toString()) {
-                //字符串
-                methodParamsType.add(String::class.java)
-            } else if (TypeName.get(it.asType()).toString() == ClassName.get(Callback::class.java)
-                    .toString()
-            ) {
-                //回调
-                methodParamsType.add(Callback::class.java)
-            } else if (TypeName.get(it.asType()).toString() == ClassName.get(Any::class.java)
-                    .toString()
-            ) {
-                //对象
-            } else {
-                throw IllegalArgumentException("${bridgeMeta.methodName}的方法不支持基础类型参数")
-            }
-        }
-        when (methodParamsType.size) {
+        when (bridgeMeta.parameters.size) {
             0 -> {
                 builder.add(
                     "\$T method = obj.getClass().getMethod(\$S);\n",
@@ -175,19 +158,21 @@ class FileCreateManager(private val mFiler: Filer, private val elementUtils: Ele
             }
 
             1 -> {
+                val params1VariableElement = bridgeMeta.parameters[0]
+                val params1TypeMirror = params1VariableElement.asType()
                 builder.add(
                     "\$T method = obj.getClass().getMethod(\$S,\$T.class);\n",
                     Method::class.java,
                     bridgeMeta.methodName,
-                    methodParamsType[0]
+                    params1TypeMirror
                 )
-                if (methodParamsType[0].typeName == TypeName.get(Callback::class.java).toString()) {
+                if (params1TypeMirror.toString() == callbackTypeName.toString()) {
                     builder.add(
                         "Object result = method.invoke(obj,new \$T(this.callback,cbId));\n",
                         Callback::class.java
                     )
                 } else {
-                    builder.add("Object result = method.invoke(obj,params);\n")
+                    builder.add("Object result = method.invoke(obj,${params1VariableElement.simpleName});\n")
                 }
                 if (bridgeMeta.returnsType?.toString() != TypeName.VOID.toString()) {
                     builder.add("return (${bridgeMeta.returnsType?.toString()})result;\n")
@@ -196,16 +181,20 @@ class FileCreateManager(private val mFiler: Filer, private val elementUtils: Ele
             }
 
             2 -> {
+                val params1VariableElement = bridgeMeta.parameters[0]
+                val params1TypeMirror = params1VariableElement.asType()
+                val params2VariableElement = bridgeMeta.parameters[1]
+                val params2TypeMirror = params1VariableElement.asType()
                 builder.add(
                     "\$T method = obj.getClass().getMethod(\$S,\$T.class,\$T.class);\n",
                     Method::class.java,
                     bridgeMeta.methodName,
-                    methodParamsType[0],
-                    methodParamsType[1]
+                    params1TypeMirror,
+                    params2TypeMirror
                 )
-                if (methodParamsType[0].typeName != TypeName.get(Callback::class.java).toString()) {
+                if (params1TypeMirror.toString() != callbackTypeName.toString()) {
                     builder.add(
-                        "Object result = method.invoke(obj,params,new \$T(this.callback,cbId));\n",
+                        "Object result = method.invoke(obj,${params1VariableElement.simpleName},new \$T(this.callback,cbId));\n",
                         Callback::class.java
                     )
                 } else {
@@ -221,16 +210,22 @@ class FileCreateManager(private val mFiler: Filer, private val elementUtils: Ele
             }
 
             3 -> {
+                val params1VariableElement = bridgeMeta.parameters[0]
+                val params1TypeMirror = params1VariableElement.asType()
+                val params2VariableElement = bridgeMeta.parameters[1]
+                val params2TypeMirror = params1VariableElement.asType()
+                val params3VariableElement = bridgeMeta.parameters[2]
+                val params3TypeMirror = params1VariableElement.asType()
                 builder.add(
                     "\$T method = obj.getClass().getMethod(\$S,\$T.class,\$T.class,\$T.class);\n",
                     Method::class.java,
                     bridgeMeta.methodName,
-                    methodParamsType[0],
-                    methodParamsType[1],
-                    methodParamsType[2]
+                    params1TypeMirror,
+                    params2TypeMirror,
+                    params3TypeMirror
                 )
                 builder.add(
-                    "Object result = method.invoke(obj,params,new \$T(this.callback,cbId),new \$T(this.callback,failCbId));\n",
+                    "Object result = method.invoke(obj,${params1VariableElement.simpleName},new \$T(this.callback,cbId),new \$T(this.callback,failCbId));\n",
                     Callback::class.java,
                     Callback::class.java
                 )
@@ -246,10 +241,13 @@ class FileCreateManager(private val mFiler: Filer, private val elementUtils: Ele
     /**
      * 生成Js回调给原生的方法
      */
-    private fun generateJsCallbackNativeMethod():MethodSpec{
+    private fun generateJsCallbackNativeMethod(): MethodSpec {
         val codeBlock = CodeBlock.builder()
             .addStatement("if (cbId.isEmpty()) return")
-            .addStatement("\$T jsCallbackNative = callback.getJavascriptCallbackNativeId(cbId,deleteCbId)",JsCallbackNative::class.java)
+            .addStatement(
+                "\$T jsCallbackNative = callback.getJavascriptCallbackNativeId(cbId,deleteCbId)",
+                JsCallbackNative::class.java
+            )
             .beginControlFlow("if (jsCallbackNative != null)")
             .addStatement("jsCallbackNative.onJsCallback(data)")
             .endControlFlow()
@@ -260,7 +258,7 @@ class FileCreateManager(private val mFiler: Filer, private val elementUtils: Ele
             .addAnnotation(ClassName.get(Consts.ANDROID_WEBKIT, Consts.JAVASCRIPT_INTERFACE))
             .addParameter(String::class.java, "cbId")
             .addParameter(String::class.java, "data")
-            .addParameter(Boolean::class.java,"deleteCbId")
+            .addParameter(Boolean::class.java, "deleteCbId")
             .addCode(codeBlock)
             .build()
     }
@@ -310,7 +308,7 @@ class FileCreateManager(private val mFiler: Filer, private val elementUtils: Ele
         codeBlock.addStatement("list.clear()")
         bridgeMetaList.forEach {
             val mapBodyBuilder = StringBuilder()
-            it.parameters.forEach {variableElement->
+            it.parameters.forEach { variableElement ->
                 mapBodyBuilder.append("add(\"${variableElement.asType().toString()}\");")
             }
             codeBlock.addStatement(

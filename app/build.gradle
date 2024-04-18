@@ -61,10 +61,10 @@ dependencies {
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
     implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.2.2'
 
-//    implementation project(path: ':jsbridge')
-//    kapt project(':jsbridge-compiler')
-    implementation 'com.github.ChinaLike.JsBridge:jsbridge:0.1.1'
-    kapt 'com.github.ChinaLike.JsBridge:jsbridge-compiler:0.1.1'
+    implementation project(path: ':jsbridge')
+    kapt project(':jsbridge-compiler')
+//    implementation 'com.github.ChinaLike.JsBridge:jsbridge:0.1.1'
+//    kapt 'com.github.ChinaLike.JsBridge:jsbridge-compiler:0.1.1'
 
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }

@@ -52,8 +52,8 @@ class CustomJavascriptBridge(private val context: Context) {
     }
 
     @JavascriptInterface
-    fun nativeNoDeleteCallback(params: String, callback: Callback) {
-        Toast.makeText(context, params, Toast.LENGTH_SHORT).show()
+    fun nativeNoDeleteCallback(data: String, callback: Callback) {
+        Toast.makeText(context, data, Toast.LENGTH_SHORT).show()
         callback.success(false)
         Handler().postDelayed(Runnable {
             callback.callback(1, "失败", null)
@@ -95,6 +95,11 @@ class CustomJavascriptBridge(private val context: Context) {
             result = context.resources.getDimensionPixelSize(resourceId)
         }
         return px2dp(result.toFloat())
+    }
+
+    @JavascriptInterface
+    fun testBoolean(success:Boolean){
+
     }
 
     fun px2dp(pxValue: Float): Int {

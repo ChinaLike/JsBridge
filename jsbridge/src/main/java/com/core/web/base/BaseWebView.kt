@@ -29,11 +29,6 @@ abstract class BaseWebView(context: Context, attrs: AttributeSet? = null, defSty
     private var uniqueId = 0
 
     /**
-     * 常量注入次数
-     */
-    private var constantInjectCount: Int = 0
-
-    /**
      * 组
      */
     private var group: String? = null
@@ -91,8 +86,6 @@ abstract class BaseWebView(context: Context, attrs: AttributeSet? = null, defSty
         }
         webViewClient = BaseWebViewClient()
         webChromeClient = WebChromeClient()
-
-//        addJavascriptInterface()
     }
 
     override fun callback(cbId: String, data: CallbackBean, deleteCb: Boolean) {
@@ -122,25 +115,6 @@ abstract class BaseWebView(context: Context, attrs: AttributeSet? = null, defSty
         }
         return jsCallbackNative
     }
-
-
-    //    /**
-//     * 回调
-//     * @param [cbId] 回调的Id
-//     * @param [data] 回调的数据
-//     * @param [isDeleteId] 是否删除当前回调，删除后后面的回调将不会执行
-//     */
-//    override fun callback(cbId: String, data: CallbackBean, isDeleteId: Boolean) {
-//        post {
-//            try {
-//                val resultData: String = JSON.toJSONString(data)
-//                val javascriptString = "${jsCallName()}.on('${cbId}','${resultData}',${isDeleteId})"
-//                loadUrl("javascript:$javascriptString")
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
 
     /**
      * 调用Js代码
